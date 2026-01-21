@@ -2,7 +2,7 @@
 
 use proc_macro::TokenStream;
 use quote::quote;
-use syn::{Data, DeriveInput, Fields, spanned::Spanned};
+use syn::{Data, DeriveInput, Fields};
 
 #[proc_macro_derive(Rotalubat)]
 pub fn rotalubat_derive(input: TokenStream) -> TokenStream {
@@ -10,18 +10,15 @@ pub fn rotalubat_derive(input: TokenStream) -> TokenStream {
     let name = &input.ident;
 
     let Data::Enum(data) = &input.data else {
-        return syn::Error::new(
-            input.ident.span(),
-            "Rotalubat can only be derived for enums",
-        )
-        .to_compile_error()
-        .into();
+        return syn::Error::new_spanned(&input, "Rotalubat can only be derived for enums")
+            .to_compile_error()
+            .into();
     };
 
     for variant in &data.variants {
         let Fields::Unit = variant.fields else {
-            return syn::Error::new(
-                variant.span(),
+            return syn::Error::new_spanned(
+                variant,
                 "Rotalubat does not support enum variants with fields",
             )
             .to_compile_error()
@@ -32,37 +29,31 @@ pub fn rotalubat_derive(input: TokenStream) -> TokenStream {
     let variants: Vec<&syn::Ident> = data.variants.iter().map(|v| &v.ident).collect();
 
     if variants.is_empty() {
-        return syn::Error::new(
-            input.ident.span(),
-            "Rotalubat requires at least one variant",
-        )
-        .to_compile_error()
-        .into();
+        return syn::Error::new_spanned(&input, "Rotalubat requires at least one variant")
+            .to_compile_error()
+            .into();
     }
 
-    let forward_arms =
-        variants
-            .iter()
-            .zip(variants.iter().cycle().skip(1))
-            .map(|(current, next)| {
-                quote! { #name::#current => #name::#next }
-            });
+    let next_variants = variants.iter().cycle().skip(1);
+    let forward_arms = variants.iter().zip(next_variants).map(|(current, next)| {
+        quote! { #name::#current => #name::#next }
+    });
 
-    let backward_arms = variants
-        .iter()
-        .zip(variants.iter().cycle().skip(variants.len() - 1))
-        .map(|(current, prev)| {
-            quote! { #name::#current => #name::#prev }
-        });
+    let prev_variants = variants.iter().cycle().skip(variants.len() - 1);
+    let backward_arms = variants.iter().zip(prev_variants).map(|(current, prev)| {
+        quote! { #name::#current => #name::#prev }
+    });
 
     let expanded = quote! {
         impl #name {
+            #[inline]
             fn forward(&mut self) {
                 *self = match self {
                     #(#forward_arms),*
                 };
             }
 
+            #[inline]
             fn backward(&mut self) {
                 *self = match self {
                     #(#backward_arms),*

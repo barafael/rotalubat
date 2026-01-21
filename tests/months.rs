@@ -19,7 +19,7 @@ enum Month {
 #[test]
 fn full_cycle_forward() {
     let mut m = Month::January;
-    for _ in 0..12 {
+    for _ in 0..48 {
         m.forward();
     }
     assert_eq!(m, Month::January);
