@@ -1,0 +1,5 @@
+error: Rotalubat does not support enum variants with fields
+ --> tests/error_messages/variant_with_fields.rs:6:5
+  |
+6 |     Tuple(i32),
+  |     ^^^^^^^^^^

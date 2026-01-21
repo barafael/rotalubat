@@ -1,0 +1,5 @@
+error: Rotalubat requires at least one variant
+ --> tests/error_messages/no_variants.rs:2:6
+  |
+2 | enum NeverEver {}
+  |      ^^^^^^^^^

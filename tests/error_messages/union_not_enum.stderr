@@ -1,0 +1,5 @@
+error: Rotalubat can only be derived for enums
+ --> tests/error_messages/union_not_enum.rs:4:7
+  |
+4 | union Jack {
+  |       ^^^^

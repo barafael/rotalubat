@@ -1,0 +1,5 @@
+error: Rotalubat can only be derived for enums
+ --> tests/error_messages/struct_not_enum.rs:4:8
+  |
+4 | struct Jones {
+  |        ^^^^^
