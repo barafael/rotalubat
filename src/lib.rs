@@ -2,7 +2,7 @@
 
 use proc_macro::TokenStream;
 use quote::quote;
-use syn::{spanned::Spanned, Data, DeriveInput, Fields};
+use syn::{Data, DeriveInput, Fields, spanned::Spanned};
 
 #[proc_macro_derive(Rotalubat)]
 pub fn rotalubat_derive(input: TokenStream) -> TokenStream {
