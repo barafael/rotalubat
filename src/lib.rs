@@ -47,14 +47,14 @@ pub fn rotalubat_derive(input: TokenStream) -> TokenStream {
     let expanded = quote! {
         impl #name {
             #[inline]
-            fn forward(&mut self) {
+            pub fn forward(&mut self) {
                 *self = match self {
                     #(#forward_arms),*
                 };
             }
 
             #[inline]
-            fn backward(&mut self) {
+            pub fn backward(&mut self) {
                 *self = match self {
                     #(#backward_arms),*
                 };
