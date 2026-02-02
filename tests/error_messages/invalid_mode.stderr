@@ -1,0 +1,5 @@
+error: unknown mode `invalid`, expected `wrap` or `clamp`
+ --> tests/error_messages/invalid_mode.rs:4:20
+  |
+4 | #[rotalubat(mode = "invalid")]
+  |                    ^^^^^^^^^

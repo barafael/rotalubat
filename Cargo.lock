@@ -64,6 +64,7 @@ dependencies = [
 name = "rotalubat"
 version = "1.0.2"
 dependencies = [
+ "proc-macro2",
  "quote",
  "syn",
  "trybuild",
